@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>랜플 - 랜덤 여행지 추천</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- 시작 화면 -->
+  <div id="start-screen">
+    <h1>Ranple</h1>
+    <div class="button-group">
+      <button id="watch-tutorial">튜토리얼 영상 시청</button>
+      <button id="skip-tutorial">바로 가기</button>
+    </div>
+  </div>
+
+  <!-- 튜토리얼 영상 화면 -->
+  <div id="tutorial-screen" class="hidden">
+    <button id="exit-video">✕</button>
+  
+    <div class="video-container">
+      <video id="tutorial-video" src="Ranple_Video.mp4" controls></video>
+    </div>
+  </div>
+  
+  <!-- 메인 -->
+  <div id="main-ui" class="hidden">
+    <button id="exit-to-home-from-main">✕</button>
+
+    <div id="ui-container">
+      <div class="panel" id="train-panel">
+        <p>기차 색깔:</p>
+        <div id="buttons" class="button-group">
+          <button data-color="Blue" data-theme="리프레시">Blue</button>
+          <button data-color="Green" data-theme="힐링/자연">Green</button>
+          <button data-color="Yellow" data-theme="가벼운 나들이">Yellow</button>
+          <button data-color="Pink" data-theme="데이트/감성">Pink</button>
+          <button data-color="Purple" data-theme="역사/문화유산">Purple</button>
+        </div>
+      </div>
+
+      <div class="panel" id="bg-panel">
+        <p>배경:</p>
+        <div id="bg-buttons" class="button-group">
+          <button data-bg="바다.jpg">바다</button>
+          <button data-bg="도시.jpg">도시</button>
+          <button data-bg="숲.jpg">숲</button>
+        </div>
+      </div>
+    </div>
+
+    <button id="recommend-button">여행지 추천 받기</button>
+    <div id="recommend-overlay">여행지 추천 중...</div>
+
+    <h2 id="region-name" class="hidden">📍 여행지</h2>
+
+    <div id="recommendation" class="hidden">
+      <section><h3>📸 관광지</h3><ul id="tour-list" class="item-list"></ul></section>
+      <section><h3>🍴 맛집</h3><ul id="food-list" class="item-list"></ul></section>
+      <section><h3>🛏️ 숙소</h3><ul id="stay-list" class="item-list"></ul></section>
+      <section><h3>🛍️ 쇼핑</h3><ul id="shopping-list" class="item-list"></ul></section>
+      <section><h3>🏄 레포츠</h3><ul id="leisure-list" class="item-list"></ul></section>
+    </div>
+
+    <button id="reset-btn" class="hidden">다시 추천받기 🔄</button>
+
+    <div id="detail-modal" class="hidden">
+      <div id="detail-content">
+        <button id="close-modal">닫기 ✖</button>
+        <h1 id="detail-title">로딩 중...</h1>
+        <p id="detail-overview"></p>
+        <div id="detail-extra"></div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import * as THREE from 'https://esm.sh/three@0.152.2';
+    import { GLTFLoader } from 'https://esm.sh/three@0.152.2/examples/jsm/loaders/GLTFLoader.js';
+    import { OrbitControls } from 'https://esm.sh/three@0.152.2/examples/jsm/controls/OrbitControls.js';
+
+    import init from './script.js';
+    init({ THREE, GLTFLoader, OrbitControls });
+
+    window.addEventListener("DOMContentLoaded", () => {
+      const tutorialBtn = document.getElementById('watch-tutorial');
+      const skipBtn = document.getElementById('skip-tutorial');
+      const startScreen = document.getElementById('start-screen');
+      const tutorialScreen = document.getElementById('tutorial-screen');
+      const mainUI = document.getElementById('main-ui');
+      const exitBtn = document.getElementById('exit-video');
+      const tutorialVideo = document.getElementById('tutorial-video');
+
+      tutorialBtn.onclick = () => {
+        startScreen.classList.add('hidden');
+        tutorialScreen.classList.remove('hidden');
+        tutorialVideo.play();
+      };
+
+      exitBtn.onclick = () => {
+        tutorialVideo.pause();
+        tutorialVideo.currentTime = 0;
+        tutorialScreen.classList.add('hidden');
+        startScreen.classList.remove('hidden');
+      };
+
+      skipBtn.onclick = () => {
+        startScreen.classList.add('hidden');
+        mainUI.classList.remove('hidden');
+      };
+
+      const exitToHomeFromMain = document.getElementById('exit-to-home-from-main');
+
+      exitToHomeFromMain.onclick = () => {
+        mainUI.classList.add('hidden');
+        startScreen.classList.remove('hidden');
+      };
+
+      const infoButton = document.getElementById('info-button');
+      const infoModal = document.getElementById('info-modal');
+      const closeInfo = document.getElementById('close-info');
+
+      infoButton.onclick = () => {
+        infoModal.classList.remove('hidden');
+      };
+
+      closeInfo.onclick = () => {
+        infoModal.classList.add('hidden');
+      };
+    });
+  </script>
+</body>
+</html>
